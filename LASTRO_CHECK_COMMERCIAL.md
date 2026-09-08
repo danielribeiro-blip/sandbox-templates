@@ -20,7 +20,9 @@ A fixed-scope technical pilot can cover one of the following:
 
 ## Component license / integration
 
-Lastro Check may be licensed as a software component to integrators, BPO providers, document-management companies, accounting/finance teams and public-sector solution providers that already own the surrounding workflow.
+A 12-month component license for one named project / end customer is currently offered at **R$ 24.900**, subject to scope confirmation. The R$ 4.900 pilot fee may be credited in full if the annual license is contracted within 10 days after pilot delivery.
+
+Lastro Check may be licensed to integrators, BPO providers, document-management companies, accounting/finance teams and public-sector solution providers that already own the surrounding workflow.
 
 Typical integration targets:
 
@@ -30,7 +32,7 @@ Typical integration targets:
 - settlement and receivables exception detection;
 - reconciliation evidence used by a larger ERP, DMS, asset-management or back-office solution.
 
-Commercial licensing is negotiated per deployment, expected volume, support burden, redistribution rights and source-code requirements.
+Source-code transfer, redistribution, white-label, multi-client, exclusivity and expanded SLA rights require separate pricing.
 
 ## What Lastro Check does not claim to be
 
@@ -42,13 +44,11 @@ Commercial distribution starts at **v0.1.1**. An earlier internal package was re
 
 ## Start a paid pilot or licensing discussion
 
-Open a GitHub issue in this repository with:
+Repository Issues are disabled, so the public intake route uses a **pull request** instead of a dead issue link.
 
-- `LASTRO PILOT` or `LASTRO LICENSE` in the title;
-- use case;
-- approximate record/file volume;
-- desired output;
-- target delivery date;
-- whether source-code, redistribution or private deployment rights are required.
+1. Copy `LASTRO_INQUIRY_TEMPLATE.md`.
+2. Add a new file named `LASTRO_INQUIRY_<organization>.md` through a pull request.
+3. Include only non-confidential scope, approximate volume, desired output, target date and rights required.
+4. Do **not** post customer data, credentials, personal identifiers or confidential datasets publicly.
 
-A bounded pilot is priced at **R$ 4.900**. No customer data should be posted publicly; describe only the scope in the issue and keep any dataset in an authorized private transfer channel.
+A bounded pilot is priced at **R$ 4.900** and the named-project annual component license at **R$ 24.900**. Sensitive material moves only through an authorized private transfer channel after fit is confirmed.
