@@ -60,4 +60,4 @@ Project-specific confidentiality, independence, tool-use and conflict restrictio
 
 ## Contact
 
-Open a GitHub issue in this repository with the title **Legal AI inquiry** and a short description of the project scope. Do not post confidential material in a public issue.
+Use the non-email GitHub intake described in [LEGAL_AI_INQUIRIES.md](./LEGAL_AI_INQUIRIES.md). Start with public, non-confidential scoping only; a private channel can be agreed after initial fit is established.
