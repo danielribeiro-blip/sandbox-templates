@@ -1,0 +1,3 @@
+ebfb52c586d3a350379f9c6c1144fcf114cf0c62c8f756d726dd01a489f78e53  output/manifest.csv
+76911c55f210876b459b2fc63e6a581a246182231d67291602150afebf6b5953  output/manifest.json
+cb2506bc6232f8c6c2f3acd82e4cb87d7d28ebfa061fbbaef43829a50b9546be  output/duplicates.json
