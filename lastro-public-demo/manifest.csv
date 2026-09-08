@@ -1,0 +1,8 @@
+relative_path,file_name,extension,mime_type,size_bytes,modified_utc,sha256,duplicate_group
+caixa_001/aditivo_1002_p1.txt,aditivo_1002_p1.txt,.txt,text/plain,49,2026-09-08T07:52:33.982360+00:00,ee8f0245945cc075a5a29f794d3129ac0429d9eb41dc4c62ee15f7fec72af9b8,
+caixa_001/contrato_1001_p1.txt,contrato_1001_p1.txt,.txt,text/plain,44,2026-09-08T07:52:33.982360+00:00,68d660ba9b81498b2ed07439329234e983d5a8a6869bc71228b3f5efebd3cccc,DUP-0001
+caixa_001/contrato_1001_p2.txt,contrato_1001_p2.txt,.txt,text/plain,44,2026-09-08T07:52:33.982360+00:00,a7200a802b9b3d9c2efc95cbc9c0751d59911e812540f3d5ff01c17e7f31c20e,
+caixa_002/contrato_1001_p1_DUPLICADO.txt,contrato_1001_p1_DUPLICADO.txt,.txt,text/plain,44,2026-09-08T07:52:33.991906+00:00,68d660ba9b81498b2ed07439329234e983d5a8a6869bc71228b3f5efebd3cccc,DUP-0001
+caixa_002/contrato_1001_p1_REPROCESSADO.txt,contrato_1001_p1_REPROCESSADO.txt,.txt,text/plain,70,2026-09-08T07:52:33.991906+00:00,e6d0fc788e0ec6da5dc3d5ff036de2c9fe59a43f43638dfd218557c836c748fd,
+caixa_002/termo_acesso_1003.txt,termo_acesso_1003.txt,.txt,text/plain,51,2026-09-08T07:52:33.991906+00:00,e890c2e9c6dee988f01d4f1898a5bdabe8968261e9d1890352156dbcc043e312,
+lote.csv,lote.csv,.csv,text/csv,49,2026-09-08T07:52:33.991906+00:00,12fd61ffe1004c8b801a15645260b585de6b373495eaeb6de5eb1f7f2e7d924b,
