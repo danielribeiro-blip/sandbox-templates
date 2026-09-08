@@ -18,6 +18,20 @@ A fixed-scope technical pilot can cover one of the following:
 4. technical handoff memo with findings, limitations and recommended integration points;
 5. commercial proposal for component licensing if the pilot validates fit.
 
+## Executed public proof
+
+A synthetic, non-confidential document-audit demonstration has been executed and published under `lastro-public-demo/`.
+
+Verified demo result:
+
+- 7 files scanned;
+- 6 unique SHA-256 hashes;
+- 1 exact-duplicate group containing 2 files;
+- a similarly named reprocessed file remained separate because its content hash changed;
+- published engine outputs include `manifest.csv`, `duplicates.json`, `RESULTS.md` and output SHA-256 hashes.
+
+This is a real executed output of the bounded inventory/hash engine, not a mock screenshot or capability claim.
+
 ## Component license / integration
 
 A 12-month component license for one named project / end customer is currently offered at **R$ 24.900**, subject to scope confirmation. The R$ 4.900 pilot fee may be credited in full if the annual license is contracted within 10 days after pilot delivery.
