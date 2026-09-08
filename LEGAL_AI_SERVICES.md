@@ -6,6 +6,20 @@ I provide practitioner-led review for teams building or evaluating legal AI syst
 
 ## Available engagements
 
+### 0. 72-Hour Legal AI Diagnostic — USD 1,250
+A prepaid, bounded diagnostic designed as a low-friction first engagement for teams that need a practitioner-grade signal quickly.
+
+Includes:
+- review of up to 20 representative prompts/model outputs;
+- legal-reasoning and hallucination grading;
+- citation/source-support verification sample;
+- Brazilian-jurisdiction and procedural-posture checks where relevant;
+- failure taxonomy with severity labels;
+- prioritized remediation memo;
+- 30-minute findings debrief.
+
+The delivery clock starts after usable materials and project restrictions are received through an agreed private channel. No confidential material should be posted publicly.
+
 ### 1. Legal AI Evaluation Sprint — USD 4,900
 A bounded review sprint for one legal-AI workflow, benchmark set or model-output batch.
 
@@ -54,9 +68,9 @@ Part-time expert support for legal-AI product, evaluation, benchmark, research o
 
 AI labs, legal-tech companies, data/evaluation vendors, law firms, compliance teams and international companies needing **Brazilian-law or Portuguese-language legal subject-matter expertise**.
 
-## Engagement rules
+## Commercial boundary
 
-Project-specific confidentiality, independence, tool-use and conflict restrictions are followed as written. No confidential client material is requested for an initial scoping discussion.
+Fees are for bounded professional subject-matter services and deliverables, not a promise of a legal outcome, model-performance result or regulatory approval. Project-specific confidentiality, independence, tool-use and conflict restrictions are followed as written. Higher-value pilots and ongoing engagements are scope-confirmed before substantive work begins.
 
 ## Contact
 
