@@ -1,0 +1,9 @@
+{
+  "candidate": "LASTRO_CHECK_AUDIT_FIX_V3",
+  "date_brt": "2026-09-08",
+  "basis": "independent re-audit v2 findings",
+  "closed_findings": ["P0-05", "P1-01", "P1-02", "P1-03", "P1-04", "P1-05", "P1-06", "P0-04A-overlay-floor"],
+  "validation": {"compileall": "PASS", "pytest": "51 PASS + 26 subtests", "unittest": "51 PASS"},
+  "production_release": "NOT_APPROVED",
+  "remaining_external_gate": "canonical engine source + real release builder + real signed-license guard"
+}
