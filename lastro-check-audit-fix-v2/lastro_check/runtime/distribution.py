@@ -10,7 +10,8 @@ PRIVATE_KEY_MARKERS = tuple(b"-----BEGIN " + key_type + b"PRIVATE KEY-----" for 
 FORBIDDEN_NAME_PARTS = ("licensor-private", "private.pem", "private.key", "signing-key", "signing_key", "id_rsa", "id_ed25519", "client_secret", "client-secret")
 FORBIDDEN_EXACT_NAMES = {"credentials.json", "secrets.json"}
 FORBIDDEN_EXTENSIONS = {".key", ".p12", ".pfx", ".secret", ".secrets"}
-SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", ".pytest_cache"}
+SKIP_DIRS = {".venv", "venv", "__pycache__", ".pytest_cache"}
+FORBIDDEN_REPOSITORY_METADATA = {".git"}
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,6 +27,8 @@ class UnsafeDistributionError(RuntimeError):
 def _iter_files(root: Path) -> Iterable[Path]:
     for path in root.rglob("*"):
         if any(part in SKIP_DIRS for part in path.parts):
+            continue
+        if any(part in FORBIDDEN_REPOSITORY_METADATA for part in path.parts):
             continue
         if path.is_file() or path.is_symlink():
             yield path
@@ -69,13 +72,15 @@ def scan_distribution(root: str | Path) -> list[DistributionFinding]:
     if not root_path.is_dir():
         raise NotADirectoryError(root_path)
     findings: list[DistributionFinding] = []
+    for candidate in root_path.rglob(".git"):
+        findings.append(DistributionFinding(str(candidate), "repository metadata is not allowed in client staging: .git"))
     for path in _iter_files(root_path):
         if path.is_symlink():
             findings.append(DistributionFinding(str(path), "symlink is not allowed in client staging"))
             continue
-        reason = _filename_is_forbidden(path)
-        if reason:
-            findings.append(DistributionFinding(str(path), reason))
+        filename_reason = _filename_is_forbidden(path)
+        if filename_reason:
+            findings.append(DistributionFinding(str(path), filename_reason))
         try:
             marker = _contains_private_key_marker(path)
         except OSError as exc:
