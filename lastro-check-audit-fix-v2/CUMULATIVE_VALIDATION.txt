@@ -1,0 +1,28 @@
+LASTRO CHECK - AUDIT FIX OVERLAY v2
+Validation timestamp: 2026-09-08T23:03:28-03:00 BRT
+
+PASS: direct pytest 41 tests + 23 subtests
+PASS: unittest 41 tests
+PASS: compileall
+PASS: runtime distribution preflight
+PASS: audit-fix delta git apply --check and fresh-tree validation
+PASS: full v2 patch git apply --check and fresh-tree validation
+
+ADVERSARIAL REGRESSIONS CLOSED IN CANDIDATE
+- cross-order receipt replay rejected
+- missing order/order_id/offer claim rejected
+- engine identity mismatch rejected
+- arbitrary amount/currency/product rejected
+- expired/wrong-product/wrong-customer/wrong-project license rejected
+- exit-code-only external license guard rejected
+- malformed/naive payment timestamp rejected
+- payment provider/reference replay rejected
+- empty fulfillment rejected
+- missing/mismatched provenance rejected
+- .env* and private-key material rejected
+- unreadable release file fails closed
+- float/bool matching window rejected
+- cancel-after-payment without financial disposition rejected
+
+REMAINING PRODUCTION GATE
+Canonical engine source, release builder and real license guard are not materialized. Production approval therefore remains FAIL pending canonical merge/build/guard re-audit and new final distribution SHA-256.

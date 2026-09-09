@@ -1,0 +1,22 @@
+{
+  "name": "LASTRO_CHECK_AUDIT_FIX_OVERLAY_v2",
+  "generated_at_brt": "2026-09-08T23:03:28-03:00",
+  "baseline_reference": {
+    "historical_engine_version": "0.1.1",
+    "historical_distribution_sha256": "d384bbbbf0b62bb0dd7d10f274cc5358939f5580a1d7c962dfa6ff59ad0b124d",
+    "audited_overlay_v1_sha256": "e8e5954200cd8771ae7a418a7375d060e171a850b20d5498849c34e8b7c94075",
+    "audited_patch_v1_sha256": "4bcda915aa95eb698c6ae23e1d5ed80115ffb88190a1c13ac67246fa3f574350",
+    "canonical_source_builder_guard_materialized": false
+  },
+  "validation": {
+    "pytest": "PASS 41 tests + 23 subtests",
+    "unittest": "PASS 41 tests",
+    "compileall": "PASS",
+    "runtime_preflight": "PASS",
+    "delta_patch_sha256": "073734463455c4739352f03ee0ee4f878511f749fbcd26faf95b3899b034787d",
+    "full_patch_sha256": "d517ed6b78f3535d33e57685f299981cd492eb0376ca292dc5a0cc7f74c9e7d7",
+    "overlay_zip_sha256": "968861b0a378f8a9dc322427ea4cb982d9f667438632ab8016c1ebf50adf72c4"
+  },
+  "integration_state": "READY_FOR_CANONICAL_MERGE_AND_REAUDIT",
+  "production_release_gate": "FAIL_UNTIL_CANONICAL_MERGE_BUILD_GUARD_REAUDIT"
+}
