@@ -1,0 +1,3 @@
+id,requirement,source,locator,status,compliance,evidence,action,owner,due
+R1,Capacidade,TR sintético,item 1,CONFIRMADA,ATENDE,Atestado sintético item 2,Conferir vigência,Operações,Antes do envio
+R2,Capacidade logística,TR sintético,item 1,PENDENTE,DESCONHECIDO,,Apresentar prova de capacidade de transporte,Operações,Antes do envio

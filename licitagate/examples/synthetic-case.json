@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "case_id": "DEMO-GESTAO-DOCUMENTAL-001",
+  "synthetic": true,
+  "source_set_complete": true,
+  "company_documents_reviewed": true,
+  "review_approved": true,
+  "reviewer": "Revisor demonstrativo",
+  "reviewed_at": "2026-09-09",
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "Capacidade",
+      "source": "TR sintético",
+      "locator": "item 1",
+      "critical": true,
+      "status": "CONFIRMADA",
+      "compliance": "ATENDE",
+      "evidence": "Atestado sintético item 2",
+      "action": "Conferir vigência",
+      "owner": "Operações",
+      "due": "Antes do envio"
+    },
+    {
+      "id": "R2",
+      "requirement": "Capacidade logística",
+      "source": "TR sintético",
+      "locator": "item 1",
+      "critical": true,
+      "status": "PENDENTE",
+      "compliance": "DESCONHECIDO",
+      "evidence": "",
+      "action": "Apresentar prova de capacidade de transporte",
+      "owner": "Operações",
+      "due": "Antes do envio"
+    }
+  ]
+}

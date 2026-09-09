@@ -1,0 +1,38 @@
+{
+  "case_id": "DEMO-GESTAO-DOCUMENTAL-001",
+  "decision": "GO CONDICIONAL",
+  "synthetic": true,
+  "blockers": [],
+  "pending_actions": [
+    "R2"
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "Capacidade",
+      "source": "TR sintético",
+      "locator": "item 1",
+      "critical": true,
+      "status": "CONFIRMADA",
+      "compliance": "ATENDE",
+      "evidence": "Atestado sintético item 2",
+      "action": "Conferir vigência",
+      "owner": "Operações",
+      "due": "Antes do envio"
+    },
+    {
+      "id": "R2",
+      "requirement": "Capacidade logística",
+      "source": "TR sintético",
+      "locator": "item 1",
+      "critical": true,
+      "status": "PENDENTE",
+      "compliance": "DESCONHECIDO",
+      "evidence": "",
+      "action": "Apresentar prova de capacidade de transporte",
+      "owner": "Operações",
+      "due": "Antes do envio"
+    }
+  ],
+  "limitation": "Resultado condicionado à matriz e revisão declaradas. Não valida autenticidade, completude ou habilitação por si só."
+}
