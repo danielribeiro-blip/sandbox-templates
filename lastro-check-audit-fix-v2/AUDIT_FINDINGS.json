@@ -1,0 +1,24 @@
+{
+  "audit_target": "LASTRO_CHECK_AUDIT_FIX_OVERLAY_v2",
+  "audit_mode": "developer_side_pre_reaudit",
+  "date_brt": "2026-09-08",
+  "old_candidate_adversarial_reproduction": {
+    "P0-01_cross_order_receipt_replay": "REPRODUCED_ACCEPTED",
+    "P0-02_arbitrary_price_currency": "REPRODUCED_READY_FOR_FULFILLMENT",
+    "P0-03_wrong_product_expired_license": "REPRODUCED_READY_FOR_FULFILLMENT"
+  },
+  "fix_candidate_validation": {
+    "pytest": "41 PASS + 23 subtests",
+    "unittest": "41 PASS",
+    "compileall": "PASS",
+    "distribution_preflight": "PASS",
+    "delta_patch_apply_check": "PASS",
+    "full_patch_apply_check": "PASS"
+  },
+  "remaining_blocker": {
+    "id": "P0-04",
+    "status": "OPEN_EXTERNAL_BLOCKER",
+    "reason": "canonical engine source, release builder and real license guard are not materialized in the supplied Project material"
+  },
+  "gate": "FAIL_PRODUCTION_PENDING_CANONICAL_MERGE_BUILD_GUARD_REAUDIT"
+}
