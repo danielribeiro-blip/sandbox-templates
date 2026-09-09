@@ -1,0 +1,22 @@
+{
+  "offers": [
+    {
+      "code": "technical_pilot",
+      "amount_minor": 490000,
+      "currency": "BRL",
+      "product_code": "Lastro Check",
+      "require_license_before_fulfillment": false,
+      "named_project_required": true,
+      "require_license_expiry": false
+    },
+    {
+      "code": "component_license_12m",
+      "amount_minor": 2490000,
+      "currency": "BRL",
+      "product_code": "Lastro Check",
+      "require_license_before_fulfillment": true,
+      "named_project_required": true,
+      "require_license_expiry": true
+    }
+  ]
+}
