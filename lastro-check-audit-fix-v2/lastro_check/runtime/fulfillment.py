@@ -9,10 +9,15 @@ from typing import Iterable
 
 from .domain import ArtifactRef, OrderRecord, OrderState, utc_now_iso
 
+
 RECEIPT_SCHEMA = "lastro.fulfillment.receipt.v2"
 PROVENANCE_SCHEMA = "lastro.check.provenance.v1"
 MINIMUM_SUPPORTED_ENGINE_VERSION = "0.1.1"
-_VERSION_RE = re.compile(r"^v?(\d+)\.(\d+)\.(\d+)(?:[-+].*)?$")
+# Production release evidence accepts an optional SemVer build metadata suffix,
+# but rejects prerelease identifiers. A prerelease such as 0.1.1-rc.1 has
+# lower precedence than the final 0.1.1 release and must never satisfy the
+# production minimum merely because its numeric core matches.
+_VERSION_RE = re.compile(r"^v?(\d+)\.(\d+)\.(\d+)(?:\+[0-9A-Za-z.-]+)?$")
 
 
 def sha256_file(path: str | Path) -> str:
@@ -39,10 +44,15 @@ def _supported_engine_version(value: str) -> bool:
     return parsed is not None and parsed >= minimum
 
 
-def collect_artifacts(paths: Iterable[str | Path], *, base_dir: str | Path) -> list[ArtifactRef]:
+def collect_artifacts(
+    paths: Iterable[str | Path],
+    *,
+    base_dir: str | Path,
+) -> list[ArtifactRef]:
     base = Path(base_dir).resolve()
     if not base.is_dir():
         raise NotADirectoryError(base)
+
     artifacts: list[ArtifactRef] = []
     seen_paths: set[str] = set()
     for raw in paths:
@@ -58,7 +68,9 @@ def collect_artifacts(paths: Iterable[str | Path], *, base_dir: str | Path) -> l
         if stored in seen_paths:
             raise ValueError(f"duplicate artifact path: {stored}")
         seen_paths.add(stored)
-        artifacts.append(ArtifactRef(path=stored, sha256=sha256_file(resolved), size_bytes=resolved.stat().st_size))
+        artifacts.append(
+            ArtifactRef(path=stored, sha256=sha256_file(resolved), size_bytes=resolved.stat().st_size)
+        )
     artifacts.sort(key=lambda item: item.path)
     return artifacts
 
@@ -70,7 +82,14 @@ def _valid_sha256(value: str) -> bool:
     return len(digest) == 64 and all(ch in "0123456789abcdef" for ch in digest)
 
 
-def build_receipt(order: OrderRecord, artifacts: list[ArtifactRef], *, engine_version: str, engine_distribution_sha256: str, provenance_artifact_path: str) -> dict:
+def build_receipt(
+    order: OrderRecord,
+    artifacts: list[ArtifactRef],
+    *,
+    engine_version: str,
+    engine_distribution_sha256: str,
+    provenance_artifact_path: str,
+) -> dict:
     if order.state is not OrderState.READY_FOR_FULFILLMENT:
         raise ValueError("order must be READY_FOR_FULFILLMENT before receipt generation")
     if not artifacts:
@@ -79,17 +98,36 @@ def build_receipt(order: OrderRecord, artifacts: list[ArtifactRef], *, engine_ve
         raise ValueError(f"engine_version must be >= {MINIMUM_SUPPORTED_ENGINE_VERSION} and use a supported release format")
     if not _valid_sha256(engine_distribution_sha256):
         raise ValueError("engine_distribution_sha256 must be a SHA-256 hex digest")
+
     artifact_map = {item.path: item for item in artifacts}
     provenance_ref = artifact_map.get(provenance_artifact_path)
     if provenance_ref is None:
         raise ValueError("provenance artifact must be included in delivered artifacts")
+
     return {
         "schema": RECEIPT_SCHEMA,
         "generated_at": utc_now_iso(),
-        "assurance": {"integrity": "sha256", "authenticity": "unsigned", "non_repudiation": False},
-        "order": {"order_id": order.order_id, "offer_code": order.offer_code, "product_code": order.product_code, "customer": order.customer, "project": order.project, "state": order.state.value},
-        "engine": {"version": engine_version, "distribution_sha256": engine_distribution_sha256.lower()},
-        "provenance": {"artifact_path": provenance_ref.path, "sha256": provenance_ref.sha256},
+        "assurance": {
+            "integrity": "sha256",
+            "authenticity": "unsigned",
+            "non_repudiation": False,
+        },
+        "order": {
+            "order_id": order.order_id,
+            "offer_code": order.offer_code,
+            "product_code": order.product_code,
+            "customer": order.customer,
+            "project": order.project,
+            "state": order.state.value,
+        },
+        "engine": {
+            "version": engine_version,
+            "distribution_sha256": engine_distribution_sha256.lower(),
+        },
+        "provenance": {
+            "artifact_path": provenance_ref.path,
+            "sha256": provenance_ref.sha256,
+        },
         "artifacts": [asdict(item) for item in artifacts],
     }
 
@@ -99,7 +137,10 @@ def write_receipt(receipt: dict, destination: str | Path) -> Path:
     if target.exists():
         raise FileExistsError(f"refusing to overwrite existing fulfillment evidence: {target}")
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(receipt, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    target.write_text(
+        json.dumps(receipt, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     return target
 
 
@@ -194,13 +235,16 @@ def verify_receipt(receipt_path: str | Path) -> list[str]:
     receipt_file, receipt, errors = _load_receipt(receipt_path)
     if errors:
         return errors
+
     if receipt.get("schema") != RECEIPT_SCHEMA:
         errors.append("unsupported receipt schema")
+
     assurance = receipt.get("assurance") or {}
     if assurance.get("integrity") != "sha256":
         errors.append("unsupported receipt integrity assurance")
     if assurance.get("authenticity") != "unsigned" or assurance.get("non_repudiation") is not False:
         errors.append("receipt assurance claims exceed supported unsigned integrity model")
+
     order = receipt.get("order")
     if not isinstance(order, dict):
         errors.append("missing order block")
@@ -210,6 +254,7 @@ def verify_receipt(receipt_path: str | Path) -> list[str]:
                 errors.append(f"missing order claim: {key}")
         if order.get("state") != OrderState.READY_FOR_FULFILLMENT.value:
             errors.append("receipt order state must be ready_for_fulfillment")
+
     engine = receipt.get("engine") or {}
     engine_version = engine.get("version")
     if not isinstance(engine_version, str) or not engine_version.strip():
@@ -219,10 +264,12 @@ def verify_receipt(receipt_path: str | Path) -> list[str]:
         errors.append(f"engine version is below minimum supported release {MINIMUM_SUPPORTED_ENGINE_VERSION}")
     if not _valid_sha256(str(engine.get("distribution_sha256", ""))):
         errors.append("invalid engine distribution SHA-256")
+
     artifacts = receipt.get("artifacts")
     if not isinstance(artifacts, list) or not artifacts:
         errors.append("receipt must contain at least one artifact")
         artifacts = []
+
     seen: set[str] = set()
     artifact_hashes: dict[str, str] = {}
     artifact_paths: dict[str, Path] = {}
@@ -253,6 +300,7 @@ def verify_receipt(receipt_path: str | Path) -> list[str]:
             errors.append(f"hash mismatch: {path}")
         artifact_hashes[path_value] = expected_hash
         artifact_paths[path_value] = path
+
     provenance = receipt.get("provenance")
     if not isinstance(provenance, dict):
         errors.append("missing provenance binding")
@@ -265,27 +313,45 @@ def verify_receipt(receipt_path: str | Path) -> list[str]:
             errors.append("provenance hash does not match delivered artifact")
         elif provenance_path in artifact_paths:
             errors.extend(_validate_provenance_manifest(artifact_paths[provenance_path], expected_engine_version=engine_version, delivered_artifact_hashes=artifact_hashes))
+
     return errors
 
 
-def verify_receipt_for_order(receipt_path: str | Path, order: OrderRecord, *, expected_engine_version: str, expected_engine_distribution_sha256: str) -> list[str]:
+def verify_receipt_for_order(
+    receipt_path: str | Path,
+    order: OrderRecord,
+    *,
+    expected_engine_version: str,
+    expected_engine_distribution_sha256: str,
+) -> list[str]:
     errors = verify_receipt(receipt_path)
     _, receipt, load_errors = _load_receipt(receipt_path)
     if load_errors:
         return list(dict.fromkeys([*errors, *load_errors]))
     if not _supported_engine_version(expected_engine_version):
         errors.append(f"expected engine version is below minimum supported release {MINIMUM_SUPPORTED_ENGINE_VERSION}")
+
     claims = receipt.get("order")
     if not isinstance(claims, dict):
         return list(dict.fromkeys([*errors, "missing order block"]))
-    expected_claims = {"order_id": order.order_id, "offer_code": order.offer_code, "product_code": order.product_code, "customer": order.customer, "project": order.project, "state": OrderState.READY_FOR_FULFILLMENT.value}
+
+    expected_claims = {
+        "order_id": order.order_id,
+        "offer_code": order.offer_code,
+        "product_code": order.product_code,
+        "customer": order.customer,
+        "project": order.project,
+        "state": OrderState.READY_FOR_FULFILLMENT.value,
+    }
     for key, expected in expected_claims.items():
         if claims.get(key) != expected:
             errors.append(f"receipt order claim mismatch: {key}")
+
     engine = receipt.get("engine") or {}
     if engine.get("version") != expected_engine_version:
         errors.append("engine version mismatch")
     expected_hash = expected_engine_distribution_sha256.lower()
     if not _valid_sha256(expected_hash) or engine.get("distribution_sha256") != expected_hash:
         errors.append("engine distribution SHA-256 mismatch")
+
     return list(dict.fromkeys(errors))

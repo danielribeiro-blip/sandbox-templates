@@ -91,5 +91,16 @@ class AuditFixV3Tests(unittest.TestCase):
             root=Path(tmp); runtime,order=ready_order("pin"); _,_,receipt=valid_bundle(root,order); path=write_receipt(receipt,root/"receipt.json"); expected=hashlib.sha256(path.read_bytes()).hexdigest(); runtime.mark_fulfilled(order,str(path),expected_engine_version="0.1.1",expected_engine_distribution_sha256=ENGINE_SHA); self.assertEqual(order.fulfillment_receipt_sha256,expected); self.assertIn(expected,order.audit_log[-1]["reference"])
             errors=verify_receipt_for_order(path,order,expected_engine_version="0.1.0",expected_engine_distribution_sha256=ENGINE_SHA); self.assertTrue(any("minimum supported" in e for e in errors))
 
+    def test_engine_release_floor_rejects_prerelease_and_accepts_final_or_build_metadata(self):
+        from lastro_check.runtime.fulfillment import _supported_engine_version
+
+        self.assertFalse(_supported_engine_version("0.1.0"))
+        self.assertFalse(_supported_engine_version("0.1.1-alpha"))
+        self.assertFalse(_supported_engine_version("0.1.1-rc.1"))
+        self.assertTrue(_supported_engine_version("0.1.1"))
+        self.assertTrue(_supported_engine_version("0.1.1+build.7"))
+        self.assertTrue(_supported_engine_version("0.1.2"))
+
+
 
 if __name__ == "__main__": unittest.main()
