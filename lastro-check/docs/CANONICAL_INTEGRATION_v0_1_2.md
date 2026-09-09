@@ -2,6 +2,8 @@
 
 Registro: 09/09/2026, BRT. Candidato de integração; não é autorização de produção.
 
+> **Scope correction:** this is a technical compatibility/integration record, not the permanent product definition. Product-scope authority is `../PRODUCT_SCOPE.md` and `SCOPE_CONTRACT_v1.json`. Receivables and Documents are the two verifier modules currently implemented by v0.1.2.
+
 ## Origem comprovada
 
 O pacote `LASTRO_CHECK_COMMERCIAL_CLOSURE_v1.zip` contém a distribuição
@@ -19,10 +21,10 @@ históricos permanecem como evidência, sem substituírem a aplicação.
 
 ## Alterações executadas
 
-- Matcher real usa valor, referência, janela temporal e decisão explícita de ambiguidade.
+- O verifier atual de Receivables usa o matcher real com valor, referência, janela temporal e decisão explícita de ambiguidade.
 - CSV real aplica neutralização aos identificadores textuais; dinheiro não é convertido em texto de fórmula.
 - CLI gera proveniência das fontes e saídas; recusa sobrescrever diretórios de resultado.
-- Inventário recusa symlinks e saída dentro da árvore de entrada.
+- O verifier atual de Documents recusa symlinks e saída dentro da árvore de entrada.
 - Guard Ed25519 verifica os mesmos bytes que identifica pelo hash e retorna claims ao adapter comercial.
 - Builder usa staging isolado e arquivos permitidos; bloqueia nomes sensíveis, PEM privado e symlinks; inspeciona o wheel final.
 - Recibos vinculam pedido, cliente, projeto, versão, distribuição e relatórios.
@@ -30,7 +32,7 @@ históricos permanecem como evidência, sem substituírem a aplicação.
 ## Evidência executada localmente
 
 - Baseline canônica: 4 testes passaram.
-- Candidato: 63 testes e 26 subtestes passaram.
+- Candidato técnico antes da correção documental de escopo: 63 testes e 26 subtestes passaram.
 - ZIP e wheel construídos; inspeção de distribuição passou.
 - Wheel instalado em venv com dependências locais compartilhadas, executado fora do checkout.
 - Demo: 4 vendas, 1 sem exceções, 3 com exceções; recibo validado.
@@ -39,16 +41,16 @@ históricos permanecem como evidência, sem substituírem a aplicação.
 - GitHub Actions configurado para Ubuntu e Windows. Resultado remoto deve ser verificado
   no commit; configuração de CI não equivale a execução aprovada.
 
-## Utilidade comercial demonstrável
+## Utilidade comercial demonstrável da implementação atual
 
-O componente permite ao integrador conferir vendas, repasses e banco a partir de
-CSV local e entregar exceções rastreáveis. Pode reduzir o trabalho de conferência
-manual em projetos delimitados; redução de horas ainda precisa ser medida em piloto.
+Os módulos atuais permitem ao integrador verificar, entre outros casos já implementados, vendas/repasses/banco a partir de CSV local e integridade/duplicidade de acervos documentais. Podem reduzir trabalho de conferência manual em projetos delimitados; redução de horas ainda precisa ser medida em piloto.
+
+Esses exemplos demonstram implementações do princípio LASTRO — verificar uma afirmação operacional contra fontes independentes e preservar evidência — e **não definem o limite conceitual do produto**.
 
 Diferenciais implementados: implantação local, formatos portáteis, janela explícita,
 ambiguidade conservadora, identificação do método de pareamento, hashes das fontes,
 recibo verificável e vínculo comercial com cliente/projeto nomeados. A reutilização
-do motor e dos testes em novos projetos é uma alavanca operacional; não comprova
+dos módulos e dos testes em novos projetos é uma alavanca operacional; não comprova
 exclusividade de mercado nem intenção de compra.
 
 ## Limites e próxima evidência necessária
@@ -63,10 +65,11 @@ são sinalizadas; agrupamento de repasses, múltiplas moedas e conectores bancá
 não foram implementados nesta integração. A conferência concorrente de arquivos
 pressupõe fontes estáveis durante a execução.
 
+Esses limites descrevem a release v0.1.2, não proíbem futuros verifier profiles.
+
 Antes de produção: validar o resultado remoto Windows/Ubuntu, obter revisão externa
 exigida para liberação e conectar verificação real de pagamento e credenciais de
 operação. Nada disso impede testar o candidato com os exemplos sintéticos.
-
 
 ## Correção após execução remota
 
@@ -75,5 +78,23 @@ o context manager de SQLite encerrava a transação sem fechar a conexão. O ada
 agora fecha explicitamente cada conexão e inicia transação IMMEDIATE antes de
 consultar/reservar a referência de pagamento. Um teste concorrente assegura que
 apenas um pedido pode reservar a mesma referência. Também foram incluídos PEM
-privados ENCRYPTED, DSA e ED25519 na inspeção de distribuição. Nova execução
-remota deve confirmar o commit final.
+privados ENCRYPTED, DSA e ED25519 na inspeção de distribuição. A execução remota
+subsequente passou em Ubuntu e Windows conforme registrado no PR #3.
+
+## Restauração de escopo — 09/09/2026
+
+Foi identificada deriva conceitual: o primeiro MVP de receivables + documents havia
+passado a ser descrito como se fosse a definição permanente de Lastro Check.
+
+Correção adotada:
+
+- `LASTRO` = independent verification and evidence infrastructure;
+- `Lastro Check` = domain-agnostic verification mechanism;
+- Receivables e Documents = primeiros verifier modules implementados;
+- runtime, licensing, hashes, provenance, receipts e preflight = infraestrutura horizontal;
+- v0.1.1/v0.1.2 = baseline de compatibilidade executável, não teto conceitual.
+
+Nenhum hardening validado foi revertido. A orientação de migração é extrair o kernel
+genérico incrementalmente, preservando os módulos atuais e evitando um segundo core.
+Veja `../PRODUCT_SCOPE.md`, `SCOPE_CONTRACT_v1.json` e
+`WORK_HANDOFF_SCOPE_RESTORATION.md` antes de futuras decisões de arquitetura.
