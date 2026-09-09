@@ -1,0 +1,19 @@
+{
+  "retrieved_at": "2026-09-09T01:32:39.295679-03:00",
+  "files": {
+    "assis-pncp.json": {
+      "sha256": "6e29132069f44f3bed5286fecc2ed934b32c4f9f67ce456ad43b0f0441c953bc",
+      "bytes": 2097
+    },
+    "assis-documents.json": {
+      "sha256": "e1fa8ded8de76b8632df7257ae738dbcdf85f5a01e9bb2894db99ac54e0325c5",
+      "bytes": 498
+    },
+    "assis-edital.pdf": {
+      "sha256": "ef0533d2321d7edb5c90d0e4ffcde5db413d561253b69884c1f43ad8575177a6",
+      "bytes": 421368
+    }
+  },
+  "source": "https://pncp.gov.br/api/consulta/v1/orgaos/46179941000135/compras/2026/380",
+  "pdf_source": "https://pncp.gov.br/pncp-api/v1/orgaos/46179941000135/compras/2026/380/arquivos/1"
+}

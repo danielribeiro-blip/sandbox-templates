@@ -1,3 +1,5 @@
+> **Atualização de 09/09/2026:** este preview de metadados foi superado pela [leitura do PDF oficial com 12 achados](research/ASSIS_FINDINGS_20260909.md) e pela [matriz executável](research/assis-case.json). As pendências abaixo refletem o estágio anterior; consultar a atualização para requisitos agora localizados. Decisão sobre qualquer empresa continua PENDENTE.
+
 # LicitaGate — preview público
 ## Município de Assis/SP — Pregão Eletrônico 35/2026
 
@@ -11,19 +13,21 @@
 
 ## 1. Decisão preliminar
 
-**GO CONDICIONAL** para empresa que já opere gestão documental física + digital e consiga comprovar, documentalmente, a cobertura do objeto completo.
+**PENDENTE — TRIAGEM PÚBLICA, SEM DECISÃO EMPRESARIAL.**
 
-**NO-GO** para fornecedor que possua apenas software, apenas digitalização ou apenas custódia física sem capacidade própria/parceiro admissível para os demais componentes.
+Aderência comercial hipotética para operadores de gestão documental física e digital. Não há documentos de empresa examinados nem conjunto integral de edital/anexos conferido neste preview. Portanto, não se conclui GO, GO CONDICIONAL ou NO-GO para um fornecedor específico.
+
+Uma oferta de software isolado não cobre todo o objeto divulgado. A possibilidade de complementar escopo depende das regras efetivas do edital e da capacidade comprovada; não se presume proibição ou autorização de parceria.
 
 ## 2. Matriz inicial de conformidade
 
 | Requisito / frente | Estado | Evidência pública atual | Ação antes da proposta |
 |---|---|---|---|
-| Guarda externa de documentos físicos | CONFIRMADA | Consta do objeto publicado | Comprovar capacidade operacional e cobertura documental no edital vigente |
-| Transferência ordenada / transporte | CONFIRMADA | Consta do objeto publicado | Validar logística, responsabilidade e eventuais requisitos de segurança |
-| Organização e conservação do acervo | CONFIRMADA | Consta do objeto publicado | Mapear metodologia e atestados compatíveis |
-| Digitalização | CONFIRMADA | Consta do objeto publicado | Validar volume, padrão, indexação, controle de qualidade e capacidade produtiva no TR |
-| Fornecimento de software | CONFIRMADA | Consta do objeto publicado | Conferir requisitos funcionais, usuários, hospedagem, segurança, implantação e suporte |
+| Guarda externa de documentos físicos | CONFIRMADA NO OBJETO, ESCOPO DETALHADO PENDENTE | Consta do objeto publicado | Comprovar capacidade operacional e cobertura documental no edital vigente |
+| Transferência ordenada / transporte | CONFIRMADA NO OBJETO, ESCOPO DETALHADO PENDENTE | Consta do objeto publicado | Validar logística, responsabilidade e eventuais requisitos de segurança |
+| Organização e conservação do acervo | CONFIRMADA NO OBJETO, ESCOPO DETALHADO PENDENTE | Consta do objeto publicado | Mapear metodologia e atestados compatíveis |
+| Digitalização | CONFIRMADA NO OBJETO, ESCOPO DETALHADO PENDENTE | Consta do objeto publicado | Validar volume, padrão, indexação, controle de qualidade e capacidade produtiva no TR |
+| Fornecimento de software | CONFIRMADA NO OBJETO, ESCOPO DETALHADO PENDENTE | Consta do objeto publicado | Conferir requisitos funcionais, usuários, hospedagem, segurança, implantação e suporte |
 | Critério de julgamento | PENDENTE | Não inferido neste preview | Ler edital integral e registrar fórmula/critério exato |
 | Habilitação jurídica/fiscal | PENDENTE | Depende do edital vigente e da empresa | Validar documento por documento e respectivas validades |
 | Qualificação econômico-financeira | PENDENTE | Depende do edital vigente | Conferir balanço, índices, capital/patrimônio e demais exigências se houver |

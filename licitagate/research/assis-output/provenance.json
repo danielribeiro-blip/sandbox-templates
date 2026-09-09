@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "input_sha256": "23547fc786606d8bf103341a4d3c19660f7ad319bd924254852ff1563e10fb5b",
+  "generator_sha256": "185fca984204a6b9f5bcc128080e922727fae513e2f04c6993920b44ebae14eb",
+  "outputs": {
+    "decision.json": "c17c4928865b33a6cf85d097dd4c2653b849fd31d15109948db4b72f7d6d88ae",
+    "matrix.csv": "6d2f7d8edf3c23f57b86ba4127e7bc8e6604103c45027678eb7277f319709254",
+    "report.html": "7eecafae940db48f9f2d13ad95aba357d1dd8ba666604e82a89a1b89e4ce4583"
+  },
+  "note": "Hashes verificam bytes; n\u00e3o certificam veracidade ou identidade."
+}

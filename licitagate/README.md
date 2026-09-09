@@ -53,3 +53,20 @@ O preview usa somente informações públicas verificáveis. Uma auditoria comer
 ---
 
 **Posicionamento:** serviço de conferência e inteligência pré-proposta para fornecedores; não é plataforma genérica de busca de licitações e não exige substituir o sistema de compras, ERP ou equipe comercial do cliente.
+
+## Produção do dossiê — versão executável
+
+[Fundamento e diferenciais](WEDGE_AND_EXECUTION.md) · [Protocolo de entrega](DELIVERY_PROTOCOL.md)
+
+A ferramenta local [gate.py](gate.py) transforma uma matriz previamente revisada em relatório HTML, CSV, decisão JSON e registro de hashes. Não interpreta edital automaticamente. Sem conjunto completo e revisão declarada, a decisão permanece PENDENTE.
+
+[Demonstração sintética](examples/output/report.html) · [Entrada reproduzível](examples/synthetic-case.json)
+
+A demonstração não representa documentos de uma empresa nem auditoria final de Assis. A execução comercial requer fontes completas, canal privado, escopo/prazo confirmados e cobrança operacional.
+
+
+## Prova aplicada em fonte oficial
+
+[Assis: 12 achados com páginas e cálculo conferido](research/ASSIS_FINDINGS_20260909.md) · [Perguntas de esclarecimento preparadas](research/ASSIS_CLARIFICATION_DRAFT.md) · [Edital oficial preservado](research/assis-edital.pdf).
+
+Inclui divergência no prazo de pagamento, início operacional imediato, ambiguidades de medição e conferência aritmética da planilha. Nenhuma conclusão sobre habilitação de empresa nem esclarecimento protocolado.
