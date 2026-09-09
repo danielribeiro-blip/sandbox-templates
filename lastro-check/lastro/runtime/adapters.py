@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import closing
 import hashlib
 import json
 import sqlite3
@@ -119,12 +120,13 @@ class SqlitePaymentReferenceStore:
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.path) as conn:
+        with closing(sqlite3.connect(self.path)) as conn, conn:
             conn.execute("CREATE TABLE IF NOT EXISTS payment_reference_claims (provider TEXT NOT NULL, reference TEXT NOT NULL, order_id TEXT NOT NULL, PRIMARY KEY(provider, reference))")
 
     def claim(self, provider: str, reference: str, order_id: str) -> bool:
         provider_key = provider.strip().lower(); reference_key = reference.strip()
-        with sqlite3.connect(self.path, isolation_level="IMMEDIATE") as conn:
+        with closing(sqlite3.connect(self.path, isolation_level="IMMEDIATE")) as conn, conn:
+            conn.execute("BEGIN IMMEDIATE")
             row = conn.execute("SELECT order_id FROM payment_reference_claims WHERE provider=? AND reference=?", (provider_key, reference_key)).fetchone()
             if row is not None:
                 return row[0] == order_id

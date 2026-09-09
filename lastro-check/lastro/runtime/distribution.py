@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Iterable
 
 
-_PRIVATE_KEY_TYPES = (b"", b"RSA ", b"EC ", b"OPENSSH ")
+_PRIVATE_KEY_TYPES = (b"", b"RSA ", b"EC ", b"OPENSSH ", b"ENCRYPTED ", b"DSA ", b"ED25519 ")
 PRIVATE_KEY_MARKERS = tuple(b"-----BEGIN " + key_type + b"PRIVATE KEY-----" for key_type in _PRIVATE_KEY_TYPES)
 FORBIDDEN_NAME_PARTS = ("licensor-private", "private.pem", "private.key", "signing-key", "signing_key", "id_rsa", "id_ed25519", "client_secret", "client-secret")
 FORBIDDEN_EXACT_NAMES = {"credentials.json", "secrets.json"}

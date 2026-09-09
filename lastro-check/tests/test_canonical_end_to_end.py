@@ -117,3 +117,25 @@ def test_builder_preflight_blocks_secrets_in_selected_package(tmp_path):
     from lastro.runtime.distribution import UnsafeDistributionError
     with pytest.raises(UnsafeDistributionError):
         stage_source(stage, tmp_path / 'rejected')
+
+
+@pytest.mark.parametrize('key_type', ['ENCRYPTED', 'DSA', 'ED25519'])
+def test_builder_blocks_other_private_pem_formats(tmp_path, key_type):
+    stage = tmp_path / 'source'
+    stage_source(ROOT, stage)
+    marker = '-----BEGIN ' + key_type + ' PRIVATE KEY-----'
+    (stage / 'lastro' / 'innocent.pem').write_text(marker + '\nsynthetic\n')
+    from lastro.runtime.distribution import UnsafeDistributionError
+    with pytest.raises(UnsafeDistributionError):
+        stage_source(stage, tmp_path / 'rejected')
+
+
+def test_payment_reference_is_claimed_by_only_one_concurrent_order(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    from lastro.runtime.adapters import SqlitePaymentReferenceStore
+    store = SqlitePaymentReferenceStore(tmp_path / 'claims.db')
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        results = list(pool.map(lambda i: store.claim('provider', 'same-payment', str(i)), range(8)))
+    assert results.count(True) == 1
+    # Windows also refuses this deletion if any connection was left open.
+    store.path.unlink()

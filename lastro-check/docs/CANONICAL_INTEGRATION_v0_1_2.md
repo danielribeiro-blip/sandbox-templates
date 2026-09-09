@@ -30,7 +30,7 @@ históricos permanecem como evidência, sem substituírem a aplicação.
 ## Evidência executada localmente
 
 - Baseline canônica: 4 testes passaram.
-- Candidato: 59 testes e 26 subtestes passaram.
+- Candidato: 63 testes e 26 subtestes passaram.
 - ZIP e wheel construídos; inspeção de distribuição passou.
 - Wheel instalado em venv com dependências locais compartilhadas, executado fora do checkout.
 - Demo: 4 vendas, 1 sem exceções, 3 com exceções; recibo validado.
@@ -66,3 +66,14 @@ pressupõe fontes estáveis durante a execução.
 Antes de produção: validar o resultado remoto Windows/Ubuntu, obter revisão externa
 exigida para liberação e conectar verificação real de pagamento e credenciais de
 operação. Nada disso impede testar o candidato com os exemplos sintéticos.
+
+
+## Correção após execução remota
+
+A primeira execução remota passou no Ubuntu e encontrou `WinError 32` no Windows:
+o context manager de SQLite encerrava a transação sem fechar a conexão. O adapter
+agora fecha explicitamente cada conexão e inicia transação IMMEDIATE antes de
+consultar/reservar a referência de pagamento. Um teste concorrente assegura que
+apenas um pedido pode reservar a mesma referência. Também foram incluídos PEM
+privados ENCRYPTED, DSA e ED25519 na inspeção de distribuição. Nova execução
+remota deve confirmar o commit final.
