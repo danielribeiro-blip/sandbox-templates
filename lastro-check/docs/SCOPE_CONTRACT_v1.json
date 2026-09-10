@@ -1,0 +1,91 @@
+{
+  "schema": "lastro.scope.contract.v1",
+  "effective_date": "2026-09-09",
+  "lastro": {
+    "definition": "independent verification and evidence infrastructure",
+    "primary_role": "verify claims about operations performed by other systems, people or processes and preserve reproducible evidence",
+    "not_defined_as": [
+      "receivables reconciliation",
+      "document inventory",
+      "payment execution",
+      "ERP or DMS replacement"
+    ]
+  },
+  "lastro_check": {
+    "definition": "domain-agnostic verification mechanism",
+    "verification_contract": {
+      "inputs": [
+        "claim",
+        "independent_evidence_sources",
+        "verification_profile",
+        "rules"
+      ],
+      "product_level_verdicts": [
+        "CONFIRMED",
+        "DIVERGENT",
+        "AMBIGUOUS",
+        "NOT_PROVABLE"
+      ],
+      "outputs": [
+        "verdict",
+        "evidence",
+        "contradictions",
+        "missing_evidence",
+        "provenance",
+        "rule_trace",
+        "artifacts",
+        "hashes"
+      ]
+    }
+  },
+  "current_implementation": {
+    "release_candidate": "0.1.3",
+    "implemented_verifiers": [
+      {
+        "code": "receivables",
+        "description": "expected/sales -> acquirer/provider -> bank verification"
+      },
+      {
+        "code": "documents",
+        "description": "recursive document inventory, metadata, SHA-256 and duplicate evidence"
+      }
+    ],
+    "horizontal_infrastructure": [
+      "provenance",
+      "source_and_output_hashing",
+      "bounded_matching_and_ambiguity",
+      "signed_licensing",
+      "payment_binding",
+      "fulfillment_receipts",
+      "distribution_preflight",
+      "audit_trail"
+    ]
+  },
+  "baseline": {
+    "historical_release": "0.1.1",
+    "historical_distribution_sha256": "d384bbbbf0b62bb0dd7d10f274cc5358939f5580a1d7c962dfa6ff59ad0b124d",
+    "role": "executable_compatibility_baseline_not_product_scope_definition"
+  },
+  "governance": {
+    "preserve": [
+      "validated_existing_verifier_behavior",
+      "security_hardening",
+      "provenance_and_evidence_integrity",
+      "runtime_trust_boundaries"
+    ],
+    "forbid_scope_narrowing": [
+      "LASTRO == receivables reconciliation",
+      "Lastro Check == receivables reconciliation + document inventory",
+      "v0.1.1 or v0.1.2 module set == permanent conceptual core"
+    ],
+    "extension_rule": "add verifier profiles/modules around the shared verification/evidence abstraction; do not create a second product core",
+    "migration_rule": "extract the generic verification kernel incrementally without destructive rewrite of validated verifier modules"
+  },
+  "repository_reading_order": [
+    "lastro-check/PRODUCT_SCOPE.md",
+    "lastro-check/docs/SCOPE_CONTRACT_v1.json",
+    "lastro-check/README.md",
+    "lastro-check/docs/CANONICAL_INTEGRATION_v0_1_2.md",
+    "implementation and tests"
+  ]
+}

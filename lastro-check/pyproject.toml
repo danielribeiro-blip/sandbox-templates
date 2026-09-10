@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lastro-check"
+version = "0.1.3"
+description = "Independent verification and evidence engine with receivables and document verifier modules"
+requires-python = ">=3.10"
+dependencies = ["cryptography>=41"]
+
+[project.scripts]
+lastro = "lastro.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["lastro*"]

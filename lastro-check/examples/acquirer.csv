@@ -1,0 +1,4 @@
+transaction_id,settlement_date,gross_amount,fee_charged,net_amount,acquirer_reference
+TX1001,2026-09-03,1000.00,25.00,975.00,ACQ-A1
+TX1002,2026-09-03,500.00,15.00,485.00,ACQ-A2
+TX1003,2026-09-06,750.00,18.75,731.25,ACQ-A3
