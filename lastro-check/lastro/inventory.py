@@ -64,7 +64,7 @@ def build_inventory(root: str | Path) -> tuple[list[FileRecord], dict[str, objec
         for p, rel, digest, stat, mime in raw
     ]
     summary = {
-        "root": str(root),
+        "root": ".",
         "files": len(records),
         "bytes": sum(r.size_bytes for r in records),
         "unique_hashes": len(hash_paths),

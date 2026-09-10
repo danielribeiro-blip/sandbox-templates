@@ -89,7 +89,7 @@ class ExternalCommandPaymentVerifier:
         if not isinstance(payload, dict) or not _strict_verified(payload.get("verified")):
             return False
         payment = payload.get("payment")
-        if not isinstance(payment, dict):
+        if not isinstance(payment, dict) or payment.get("order_id") != order.order_id:
             return False
         provider = _strict_text(payment.get("provider")); reference = _strict_text(payment.get("reference")); amount_minor = _strict_int(payment.get("amount_minor")); currency = _strict_text(payment.get("currency")); confirmed_at = _strict_text(payment.get("confirmed_at"))
         if None in (provider, reference, amount_minor, currency, confirmed_at):

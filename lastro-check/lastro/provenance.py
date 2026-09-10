@@ -120,5 +120,6 @@ def write_provenance_manifest(manifest: Mapping[str, Any], path: Path) -> str:
         raise FileExistsError(f"refusing to overwrite existing evidence: {path}")
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
-    path.write_text(payload, encoding="utf-8")
+    with path.open("x", encoding="utf-8") as handle:
+        handle.write(payload)
     return sha256_file(path)

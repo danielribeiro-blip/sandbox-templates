@@ -17,7 +17,7 @@ parser.add_argument('--examples', type=Path, required=True)
 parser.add_argument('--distribution', type=Path, required=True)
 parser.add_argument('--out', type=Path, required=True)
 a = parser.parse_args()
-assert __version__ == importlib.metadata.version('lastro-check') == '0.1.2'
+assert __version__ == importlib.metadata.version('lastro-check') == '0.1.3'
 command = [sys.executable, '-m', 'lastro.cli', 'reconcile']
 for name in ('sales', 'acquirer', 'bank'):
     command += ['--'+name, str(a.examples / (name+'.csv'))]

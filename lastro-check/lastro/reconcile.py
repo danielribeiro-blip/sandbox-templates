@@ -1,5 +1,6 @@
 from __future__ import annotations
 import csv
+import json
 from dataclasses import dataclass, asdict
 from datetime import date, datetime, timedelta
 from decimal import Decimal
@@ -24,7 +25,14 @@ def parse_date(value: str | None) -> date | None:
 
 def read_csv(path: str | Path) -> list[dict[str, str]]:
     with open(path, "r", newline="", encoding="utf-8-sig") as fh:
-        return list(csv.DictReader(fh))
+        reader = csv.DictReader(fh)
+        fields = reader.fieldnames
+        if not fields or any(not f.strip() for f in fields) or len(fields) != len(set(fields)):
+            raise ValueError("CSV needs unique non-empty column names")
+        rows = list(reader)
+        if any(None in row or any(v is None for v in row.values()) for row in rows):
+            raise ValueError("CSV record width does not match header")
+        return rows
 
 @dataclass
 class ReconRow:
@@ -45,6 +53,7 @@ class ReconRow:
     status: str
     exceptions: str
     match_method: str = "NONE"
+    candidates: str = "[]"
 
 REQUIRED_SALES = {"transaction_id", "sale_date", "gross_amount", "fee_expected", "expected_settlement_date"}
 REQUIRED_ACQ = {"transaction_id", "settlement_date", "gross_amount", "fee_charged", "net_amount", "acquirer_reference"}
@@ -53,9 +62,13 @@ REQUIRED_BANK = {"posting_date", "amount", "description", "reference"}
 def _validate(rows: list[dict[str, str]], required: set[str], name: str) -> None:
     if not rows:
         raise ValueError(f"{name} is empty")
-    missing = required - set(rows[0].keys())
-    if missing:
-        raise ValueError(f"{name} missing columns: {', '.join(sorted(missing))}")
+    for number, row in enumerate(rows, start=2):
+        missing = required - set(row)
+        if missing:
+            raise ValueError(f"{name} row {number} missing columns: {', '.join(sorted(missing))}")
+        for field in required - {"description", "reference", "acquirer_reference"}:
+            if not isinstance(row[field], str) or not row[field].strip():
+                raise ValueError(f"{name} row {number}: {field} is required")
 
 def reconcile(
     sales_rows: list[dict[str, str]],
@@ -69,6 +82,22 @@ def reconcile(
     _validate(acquirer_rows, REQUIRED_ACQ, "acquirer")
     _validate(bank_rows, REQUIRED_BANK, "bank")
 
+    if type(settlement_grace_days) is not int or settlement_grace_days < 0:
+        raise ValueError("settlement_grace_days must be a non-negative integer")
+    identifiers = [row["transaction_id"].strip() for row in sales_rows]
+    if len(set(identifiers)) != len(identifiers):
+        raise ValueError("duplicate sales transaction_id: provide a unique event identifier")
+    # Validate every monetary/date field, including evidence not selected for matching.
+    for records, numeric, dates in (
+        (sales_rows, ("gross_amount", "fee_expected"), ("sale_date", "expected_settlement_date")),
+        (acquirer_rows, ("gross_amount", "fee_charged", "net_amount"), ("settlement_date",)),
+        (bank_rows, ("amount",), ("posting_date",)),
+    ):
+        for record in records:
+            for field in numeric:
+                money(record[field])
+            for field in dates:
+                parse_date(record[field])
     policy = MatchPolicy(allow_heuristic=True, max_date_delta_days=bank_date_window_days)
     if not amount_tolerance.is_finite() or amount_tolerance < 0:
         raise ValueError("amount_tolerance must be finite and non-negative")
@@ -81,24 +110,31 @@ def reconcile(
     counts: dict[str, int] = {}
     financial_gap = Decimal("0")
 
-    def bank_match(target: Decimal, target_date: date | None, reference: str) -> tuple[dict[str, str] | None, str]:
+    def bank_match(target: Decimal, target_date: date | None, reference: str) -> tuple[dict[str, str] | None, str, str]:
         if target_date is None:
-            return None, "NONE"
+            return None, "NONE", "[]"
         candidates = []
         for idx in bank_unused:
             row = bank_rows[idx]
             bdate = parse_date(row.get("posting_date"))
-            if bdate is None or abs((bdate-target_date).days) > bank_date_window_days:
+            if bdate is None:
                 continue
-            if abs(money(row["amount"])-target) > amount_tolerance:
+            candidate_ref = (row.get("reference") or "").strip()
+            outside_window = abs((bdate-target_date).days) > bank_date_window_days
+            if outside_window and not (reference.strip() and candidate_ref == reference.strip()):
                 continue
-            candidates.append(MatchEvent(str(idx), bdate, (row.get("reference") or "").strip(), True))
+            amount_ok = abs(money(row["amount"])-target) <= amount_tolerance
+            # A strong source reference identifies the event even when its amount diverges.
+            # Financial consistency is reported separately as BANK_AMOUNT_MISMATCH.
+            if not amount_ok and not (reference.strip() and candidate_ref == reference.strip()):
+                continue
+            candidates.append(MatchEvent(str(idx), bdate, candidate_ref, True))
         decision = decide_match(MatchEvent("target", target_date, reference.strip(), True), candidates, policy)
         if decision.status is not MatchStatus.MATCHED:
-            return None, decision.status.value
+            return None, decision.status.value, json.dumps([{"id": a.event_id, "date_delta_days": a.date_delta_days, "exact_reference": a.exact_reference, "inside_date_window": a.inside_date_window} for a in decision.candidates], sort_keys=True)
         idx = int(decision.matched_event_id)
         bank_unused.remove(idx)
-        return bank_rows[idx], decision.method.value
+        return bank_rows[idx], decision.method.value, json.dumps([{"id": a.event_id, "date_delta_days": a.date_delta_days, "exact_reference": a.exact_reference, "inside_date_window": a.inside_date_window} for a in decision.candidates], sort_keys=True)
 
     for sale in sales_rows:
         tx = sale["transaction_id"].strip()
@@ -108,6 +144,7 @@ def reconcile(
         exp_date = parse_date(sale["expected_settlement_date"])
         exceptions: list[str] = []
         match_method = "NONE"
+        candidate_trace = "[]"
         acq_list = acq_by_tx.get(tx, [])
         acq = acq_list[0] if acq_list else None
         if len(acq_list) > 1:
@@ -133,7 +170,7 @@ def reconcile(
                 exceptions.append("NET_MISMATCH")
             if exp_date and acq_date and acq_date > exp_date + timedelta(days=settlement_grace_days):
                 exceptions.append("LATE_SETTLEMENT")
-            bank, match_method = bank_match(net_acq, acq_date or exp_date, acq_ref)
+            bank, match_method, candidate_trace = bank_match(net_acq, acq_date or exp_date, acq_ref)
             if match_method == "AMBIGUOUS":
                 exceptions.append("BANK_AMBIGUOUS")
             if not bank:
@@ -168,6 +205,7 @@ def reconcile(
             status=status,
             exceptions="|".join(exceptions),
             match_method=match_method,
+            candidates=candidate_trace,
         ))
 
     unmatched_bank_total = sum((money(bank_rows[i]["amount"]) for i in bank_unused), Decimal("0"))

@@ -99,7 +99,8 @@ def write_receipt(receipt: dict, destination: str | Path) -> Path:
     if target.exists():
         raise FileExistsError(f"refusing to overwrite existing fulfillment evidence: {target}")
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(receipt, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    with target.open("x", encoding="utf-8") as handle:
+        handle.write(json.dumps(receipt, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
     return target
 
 

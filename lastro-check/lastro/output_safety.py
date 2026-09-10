@@ -13,7 +13,7 @@ _FORMULA_PREFIXES = ("=", "+", "-", "@", "\t", "\r", "\n")
 def safe_untrusted_text_cell(value: Any) -> str:
     """Neutralize formula-like prefixes in untrusted textual fields only."""
     text = "" if value is None else str(value)
-    if text.startswith(_FORMULA_PREFIXES):
+    if text.startswith(_FORMULA_PREFIXES) or text.lstrip().startswith(("=", "+", "-", "@")):
         return "'" + text
     return text
 
@@ -41,7 +41,7 @@ def write_safe_csv(
     if unknown:
         raise ValueError(f"unknown untrusted_text_fields: {sorted(unknown)}")
 
-    with path.open("w", encoding="utf-8", newline="") as handle:
+    with path.open("x", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="raise")
         writer.writeheader()
         for row in rows:

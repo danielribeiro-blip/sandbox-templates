@@ -233,6 +233,7 @@ class RuntimeTests(unittest.TestCase):
                 "verified": True,
                 "event_sha256": event_sha,
                 "payment": {
+                    "order_id": "ord-auth-payment",
                     "provider": "provider",
                     "reference": "ref-auth",
                     "amount_minor": PILOT.amount_minor,

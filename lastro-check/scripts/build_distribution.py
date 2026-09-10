@@ -18,14 +18,17 @@ from lastro.runtime.distribution import assert_distribution_safe
 
 def stage_source(root: Path, stage: Path) -> None:
     stage.mkdir(parents=True, exist_ok=False)
-    for name in ('lastro', 'examples', 'scripts', 'README.md', 'pyproject.toml'):
+    for name in ('lastro', 'examples', 'scripts', 'README.md', 'pyproject.toml', 'PRODUCT_SCOPE.md', 'docs', 'SECURITY.md'):
         source = root / name
         if not source.exists():
             raise FileNotFoundError(source)
         if source.is_symlink() or (source.is_dir() and any(p.is_symlink() for p in source.rglob('*'))):
             raise ValueError('symlink in selected distribution source')
         if source.is_dir():
-            shutil.copytree(source, stage / name, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+            ignore = shutil.ignore_patterns('__pycache__', '*.pyc')
+            if name == 'docs':
+                ignore = shutil.ignore_patterns('__pycache__', '*.pyc', 'WORK_HANDOFF_SCOPE_RESTORATION.md', 'CANONICAL_INTEGRATION_v0_1_2.md')
+            shutil.copytree(source, stage / name, ignore=ignore)
         else:
             shutil.copy2(source, stage / name)
     assert_distribution_safe(stage)

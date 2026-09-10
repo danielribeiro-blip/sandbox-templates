@@ -68,7 +68,7 @@ def _audit_candidates(target: MatchEvent, candidates: Iterable[MatchEvent], poli
 
 def decide_match(target: MatchEvent, candidates: Iterable[MatchEvent], policy: MatchPolicy) -> MatchDecision:
     audited = _audit_candidates(target, candidates, policy)
-    exact = tuple(item for item in audited if item.exact_reference)
+    exact = tuple(item for item in audited if item.exact_reference and (policy.max_date_delta_days is None or item.inside_date_window))
     if len(exact) == 1:
         return MatchDecision(MatchStatus.MATCHED, MatchMethod.EXACT_REFERENCE, exact[0].event_id, audited, "one strong exact reference matched")
     if len(exact) > 1:

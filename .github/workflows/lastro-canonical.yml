@@ -30,7 +30,7 @@ jobs:
           python -m pip uninstall -y lastro-check
           python -m pip install --no-deps ../canonical-release/*.whl
           cd ..
-          python lastro-check/scripts/smoke_installed.py --examples lastro-check/examples --distribution canonical-release/lastro-commercial-v0.1.2.zip --out canonical-demo
+          python lastro-check/scripts/smoke_installed.py --examples lastro-check/examples --distribution canonical-release/lastro-commercial-v0.1.3.zip --out canonical-demo
       - uses: actions/upload-artifact@v4
         with:
           name: lastro-canonical-${{ matrix.os }}

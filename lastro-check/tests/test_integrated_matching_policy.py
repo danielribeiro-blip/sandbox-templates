@@ -12,7 +12,7 @@ class MatchingPolicyTests(unittest.TestCase):
     def test_exact_reference_has_precedence_over_heuristics(self):
         decision = decide_match(
             e("target", 10, "REF-1"),
-            [e("near", 10, "OTHER"), e("exact", 25, "REF-1")],
+            [e("near", 10, "OTHER"), e("exact", 10, "REF-1")],
             MatchPolicy(True, 2),
         )
         self.assertEqual((decision.status, decision.method, decision.matched_event_id), (MatchStatus.MATCHED, MatchMethod.EXACT_REFERENCE, "exact"))

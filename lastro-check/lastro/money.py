@@ -5,10 +5,10 @@ CENT = Decimal("0.01")
 
 def money(value: object) -> Decimal:
     if value is None:
-        return Decimal("0.00")
+        raise ValueError("monetary value is required")
     s = str(value).strip().replace("R$", "").replace(" ", "")
     if not s:
-        return Decimal("0.00")
+        raise ValueError("monetary value is required")
     # Accept 1.234,56 and 1234.56 without guessing incorrectly for simple values.
     if "," in s and "." in s:
         if s.rfind(",") > s.rfind("."):
@@ -18,7 +18,10 @@ def money(value: object) -> Decimal:
     elif "," in s:
         s = s.replace(".", "").replace(",", ".")
     try:
-        return Decimal(s).quantize(CENT, rounding=ROUND_HALF_UP)
+        value_decimal = Decimal(s)
+        if not value_decimal.is_finite():
+            raise ValueError("monetary value must be finite")
+        return value_decimal.quantize(CENT, rounding=ROUND_HALF_UP)
     except InvalidOperation as exc:
         raise ValueError(f"invalid monetary value: {value!r}") from exc
 

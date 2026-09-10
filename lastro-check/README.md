@@ -1,4 +1,4 @@
-# Lastro Check v0.1.2
+# Lastro Check v0.1.3
 
 **Lastro Check is LASTRO's domain-agnostic verification mechanism.** It is designed to test operational claims against independent evidence and explicit verification rules, then preserve a traceable verdict, provenance and evidence artifacts.
 
@@ -127,3 +127,12 @@ As camadas de confiabilidade e runtime agora usam o namespace real `lastro`.
 Os verifier CLIs continuam independentes do controle comercial. O integrador deve usar o runtime/guard antes de autorizar uma execução contratada; isso não constitui DRM, revogação remota ou validação de pagamento bancário. Os adapters de evidência são interfaces para um verificador confiável, não prova autônoma de recebimento.
 
 Os testes e a documentação de revisão ficam no repositório. O ZIP cliente inclui engine, exemplos sintéticos, README, metadados e scripts; não inclui testes nem registros comerciais. Rode `pytest` a partir do checkout de desenvolvimento.
+
+
+## Release v0.1.3 — validade das entradas e entrega comercial
+
+A v0.1.3 preserva os módulos atuais e a constituição de escopo. Valores monetários
+vazios/não finitos, CSV malformado, IDs de venda repetidos e prazos negativos são
+recusados. Ausência de valor não é zero, e uma entrada inválida não gera confirmação.
+O pacote cliente agora contém PRODUCT_SCOPE.md e os contratos/guias em docs/.
+Leia docs/CLIENT_GUIDE.md para instalação, avaliação, interpretação e suporte.
